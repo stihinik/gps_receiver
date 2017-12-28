@@ -1,0 +1,11 @@
+led\tm_stm32f4_gpio.o: ..\Drivers\tm_stm32f4_gpio.c
+led\tm_stm32f4_gpio.o: ..\Drivers\tm_stm32f4_gpio.h
+led\tm_stm32f4_gpio.o: ..\Drivers\stm32f4xx.h
+led\tm_stm32f4_gpio.o: ../Drivers/CMSIS/Include/core_cm4.h
+led\tm_stm32f4_gpio.o: C:\Keil\ARM\ARMCC\bin\..\include\stdint.h
+led\tm_stm32f4_gpio.o: ../Drivers/CMSIS/Include/core_cmInstr.h
+led\tm_stm32f4_gpio.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
+led\tm_stm32f4_gpio.o: ../Drivers/CMSIS/Include/core_cmFunc.h
+led\tm_stm32f4_gpio.o: ../Drivers/CMSIS/Include/core_cmSimd.h
+led\tm_stm32f4_gpio.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h
+led\tm_stm32f4_gpio.o: ..\Drivers\stm32f4xx_gpio.h

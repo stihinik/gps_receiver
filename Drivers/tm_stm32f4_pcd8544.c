@@ -16,9 +16,9 @@
  * | along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * |----------------------------------------------------------------------
  */
+
 #include "tm_stm32f4_pcd8544.h"
-#include "main.h"
-#include "stm32f4xx_hal.h"
+
 
 unsigned char PCD8544_Buffer[PCD8544_BUFFER_SIZE];
 unsigned char PCD8544_UpdateXmin = 0, PCD8544_UpdateXmax = 0, PCD8544_UpdateYmin = 0, PCD8544_UpdateYmax = 0;

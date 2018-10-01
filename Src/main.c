@@ -9,7 +9,7 @@
   * inserted by the user or by software development tools
   * are owned by their respective copyright owners.
   *
-  * COPYRIGHT(c) 2017 STMicroelectronics
+  * COPYRIGHT(c) 2018 STMicroelectronics
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -39,6 +39,8 @@
 #include "main.h"
 #include "stm32f4xx_hal.h"
 #include "tm_stm32f4_pcd8544.h"
+#include "my_function.h"
+#include "stdlib.h"
 
 /* USER CODE BEGIN Includes */
 
@@ -66,152 +68,6 @@ static void MX_SPI2_Init(void);
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
-
-
-
-#define DEVICE_ADDRESS   0x08020000
-#define DEVICE_SECTOR FLASH_SECTOR_5
-
-
-uint32_t flash_read(uint32_t address) 
-{
-return (*(uint32_t*) address);
-} 
-
-
-void ReadDeviceAddress(char* Dout,char* dout2) 
-{
-	uint32_t i,s;
-   for (i=0;i<20;i++)
-	{
-		Dout[i] = flash_read(DEVICE_ADDRESS+i*0x10);
-	}
-	s=0;
-	   for (i=20;i<40;i++)
-	{
-		dout2[s] = flash_read(DEVICE_ADDRESS+i*0x10);
-		s++;
-	}
-}
-void WriteDeviceAddress(char* data,char*map)
-{
-uint8_t i,s;
-
-	HAL_FLASH_Unlock();
-	FLASH_Erase_Sector(DEVICE_SECTOR, FLASH_VOLTAGE_RANGE_3);
-	for (i=0;i<20;i++)
-	{
-	 HAL_FLASH_Program(TYPEPROGRAM_WORD, DEVICE_ADDRESS+i*0x10, data[i]);
-	}
-	s=0;
-		for (i=20;i<40;i++)
-	{
-	 HAL_FLASH_Program(TYPEPROGRAM_WORD, DEVICE_ADDRESS+i*0x10, map[s]);
-		s++;
-	}
-	HAL_FLASH_Lock();
-}
-float preobr(char*t, uint8_t k)
-{
-	uint8_t i,s,f;
-	char num[20];
-	float b,p;
-	i=0;
-	f=0;
-	while (k!=0)
-	{
-		if(t[i]==','){k--;}
-		i++;
-	}
-	
-	s=0;
-	while (s!=20)
-	{
-		num[s]=0;
-		s++;
-	}
-	s=0;
-	while (t[i]!=',')
-	{
-		num[s]=t[i];
-		s++;
-		i++;
-		f++;
-	}
-	num[s]='.';
-	s=0;
-	b=1;
-	while(num[s]!='.')
-	{
-		b=b*10;
-		s++;
-	}
-	p=0;
-	s=0;
-	b=b/10;
-	while(f!=0)
-	{
-		if(num[s]!='.')
-		{
-		 p=p+b*(num[s]-48);
-		 b=b/10;
-		}
-		s++;
-		f--;
-	}
-	return(p);
-}
-char prchar(char*t, uint8_t k)
-{
-	uint16_t i;
-	char num;
-	i=0;
-	while (k!=0)
-	{
-		if(t[i]==','){k--;}
-		i++;
-	}
-	num=t[i];
-	return(num);
-}
-void prcharmas (char*num, char*t, uint8_t k)
-{
-	uint16_t i,s;
-	i=0;
-	while (k!=0)
-	{
-		if(t[i]==','){k--;}
-		i++;
-	}
-	s=0;
-	while (t[i]!=',')
-	{
-	num[s]=t[i];
-		i++;
-		s++;
-	}
-}
-void prcharmas2 (char*num, char*t, uint8_t k)
-{
-	uint16_t i,s,n;
-	i=0;
-	while (k!=0)
-	{
-		if(t[i]==','){k--;}
-		i++;
-	}
-	s=0;
-	n=0;
-	while (n!=2)
-	{
-		if(t[i+1]==','){n++;}
-	  num[s]=t[i];
-		i++;
-		s++;
-	}
-}
-
-
 struct GP {
 	char tip[10];
 	float time;
@@ -228,7 +84,6 @@ struct GP {
 	char rvis1;
 	float vis2;
 	char rvis2;
-	
 };
 
 /* USER CODE END 0 */
@@ -237,11 +92,11 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-char buf[300];
+char data_GPS[300];
 char time[20],late[20], log[20],v[20], dat[20], visota[20],visota2[20],count[20],dop[20],dop2[20];
 uint8_t data;
-uint16_t k,m,i=0;
-uint32_t N=0;	
+uint16_t counter,comma=0;
+uint8_t counter_Button=0;	
   /* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
@@ -266,122 +121,78 @@ uint32_t N=0;
   MX_SPI2_Init();
 
   /* USER CODE BEGIN 2 */
-
-	//Initialize LCD with 0x38 software contrast
-
-	PCD8544_Init(0x38);
-	HAL_Delay(50);
-	PCD8544_Clear();
-	HAL_Delay(50);
-	PCD8544_GotoXY(20, 20);
-	PCD8544_Puts("pasha cool", PCD8544_Pixel_Set, PCD8544_FontSize_5x7);
-	PCD8544_Refresh();
-	HAL_Delay(50);
-
+	void Initial_Inscription();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-	//HAL_UART_Receive(&huart3,&data,2,3);
   while (1)
   {
-		
-		if(huart3.RxXferCount==0)
-		{				
-			buf[0]='$';
-			buf[1]='G';
-			buf[2]='P';
-			while(data!='R')
-				{
-					HAL_UART_Receive(&huart3,&data,1,0);
-				}
-			buf[3]=data;
-			i=4;
-			while(i<300)
-			{
-        HAL_UART_Receive(&huart3,&data,1,1);
-				buf[i]=data;
-				i++;
+    WriteGPSinMassiv(data_GPS);		
+		struct GP GPRMC;
+			Output_Line(GPRMC.tip,data_GPS,0);
+			StringInFloat(&GPRMC.time,data_GPS,1);
+      Output_Line(&GPRMC.sost,data_GPS,2);
+			if (GPRMC.sost=='V')
+			{ 
+				StringInFloat(&GPRMC.dat,data_GPS,9);
 			}
-			
-			i=0;
-			k=0;
-   		struct GP GPRMC;
-				prcharmas(GPRMC.tip,buf,0);
-				GPRMC.time=preobr(buf,1);
-				prcharmas(time,buf,1);
-				GPRMC.sost=prchar(buf,2);
-			
-				if (GPRMC.sost=='V')
-				{ 
-					GPRMC.dat=preobr(buf,9);
-			  }
-				else
+			else
+			{
+				StringInFloat(&GPRMC.lat,data_GPS,3);
+				Output_Line(late,data_GPS,3);
+				Output_Line(&GPRMC.naplat,data_GPS,4);
+				StringInFloat(&GPRMC.log,data_GPS,5);
+				Output_Line(log,data_GPS,5);
+				StringInFloat(&GPRMC.naplog,data_GPS,6);
+				StringInFloat(&GPRMC.v, data_GPS,7);
+				Output_Line(v,data_GPS,7);					
+				StringInFloat(&GPRMC.dat,data_GPS,9);
+				Output_Line(dat,data_GPS,9);
+				counter=1;
+				comma=0;
+				while(data_GPS[counter]!='$')
 				{
-						GPRMC.lat=preobr(buf,3);
-            prcharmas2(late,buf,3);
-            GPRMC.naplat=prchar(buf,4);
-						GPRMC.log=preobr(buf,5);
-					  prcharmas2(log,buf,5);
-            GPRMC.naplog=prchar(buf,6);
-						GPRMC.v=preobr(buf,7);
-            prcharmas(v,buf,7);					
-						GPRMC.dat=preobr(buf,9);
-					  prcharmas(dat,buf,9);
-						k=1;
-						m=0;
- 						while(buf[k]!='$')
-						{
-							if(buf[k]==',')
-							{
-								m++;
-							}
-							k++;
-						}
-						i=0;
-						
-						struct GP GPGGA;
-						while(buf[k+1]!=',')
-						{	
-							GPGGA.tip[i]=buf[k+1];
-							k++;
-							i++;
-						}
-			      GPGGA.time=preobr(buf,m+1);
-			      GPGGA.lat=preobr(buf,m+2);
-            GPGGA.naplat=prchar(buf,m+3);
-						GPGGA.log=preobr(buf,m+4);
-            GPGGA.naplog=prchar(buf,m+5);
-						GPGGA.count=preobr(buf,m+7);
-				    prcharmas(count,buf,m+7);
-						GPGGA.geom=preobr(buf,m+8);
-						GPGGA.vis1=preobr(buf,m+9);
-						GPGGA.rvis1=prchar(buf,m+10);
-				    prcharmas(visota,buf,m+9);
-						GPGGA.vis2=preobr(buf,m+11);
-						GPGGA.rvis2=prchar(buf,m+12);
-				    prcharmas2(visota2,buf,m+11);
+					if(data_GPS[counter]==',')
+					{
+						comma++;
 					}
-			i=0;
-      k=0;	
-	  }		
+					counter++;
+				}
+				struct GP GPGGA;
+				Output_Line(GPGGA.tip,data_GPS,comma);
+				StringInFloat(&GPGGA.time,data_GPS,comma+1);
+				StringInFloat(&GPGGA.lat,data_GPS,comma+2);
+				Output_Line(&GPGGA.naplat,data_GPS,comma+3);
+				StringInFloat(&GPGGA.log,data_GPS,comma+4);
+				Output_Line(&GPGGA.naplog,data_GPS,comma+5);
+				StringInFloat(&GPGGA.count,data_GPS,comma+7);
+				Output_Line(count,data_GPS,comma+7);
+				StringInFloat(&GPGGA.geom,data_GPS,comma+8);
+				StringInFloat(&GPGGA.vis1,data_GPS,comma+9);
+				Output_Line(&GPGGA.rvis1,data_GPS,comma+10);
+				Output_Line(visota,data_GPS,comma+9);
+				StringInFloat(&GPGGA.vis2,data_GPS,comma+11);
+				StringInFloat(&GPGGA.rvis2,data_GPS,comma+12);
+				Output_Line(visota2,data_GPS,comma+11);
+			}
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
 		
-		if (HAL_GPIO_ReadPin(GPIOA,GPIO_PIN_0)==1)
+		if (READ_BUTTON ==1)
 		{ 
-		  if (N<5) {N++;}
+		  if (counter_Button<5){counter_Button++;}
 			else  
 			{
 				HAL_GPIO_WritePin(GPIOD	,GPIO_PIN_15, GPIO_PIN_SET);
 				WriteDeviceAddress(late,log);
-				N=1;
+				counter_Button=1;
 				HAL_GPIO_WritePin(GPIOD	,GPIO_PIN_15, GPIO_PIN_RESET);
 			}
 	  }
 
-    if ((N==1)&(HAL_GPIO_ReadPin(GPIOA,GPIO_PIN_0)==0))
+    if ((counter_Button==1)&(READ_BUTTON ==0))
 		{
 		 PCD8544_Clear();
 		 //Go to x=14, y=3 position
@@ -405,7 +216,7 @@ uint32_t N=0;
 		 //Display data on LCD
 		 PCD8544_Refresh();
 		}
-		else if ((N==2)&(HAL_GPIO_ReadPin(GPIOA,GPIO_PIN_0)==0))
+		else if ((counter_Button==2)&(READ_BUTTON ==0))
 			{
 				PCD8544_Clear();
 			 //Go to x=14, y=3 position
@@ -424,16 +235,15 @@ uint32_t N=0;
 			 //Display data on LCD
 			 PCD8544_Refresh();
 			}
-			if ((N==3)&(HAL_GPIO_ReadPin(GPIOA,GPIO_PIN_0)==0))
+			if ((counter_Button==3)&(READ_BUTTON==0))
 			{	
        PCD8544_Clear();			 
 			 PCD8544_GotoXY(10, 10);				
 			 PCD8544_Puts("dat=", PCD8544_Pixel_Set, PCD8544_FontSize_5x7);
 			 PCD8544_GotoXY(30, 20);				
 			 PCD8544_Puts(dat, PCD8544_Pixel_Set, PCD8544_FontSize_5x7);					
-
 			 PCD8544_Refresh();
-			 N=0;
+			 counter_Button=0;
 			}
 	}
   /* USER CODE END 3 */
@@ -506,7 +316,7 @@ static void MX_SPI2_Init(void)
   hspi2.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi2.Init.NSS = SPI_NSS_SOFT;
-  hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8;
   hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi2.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;

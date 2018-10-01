@@ -10,8 +10,6 @@
       <TargetName>led</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>5060528::V5.06 update 5 (build 528)::ARMCC</pCCUsed>
-      <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
           <Device>STM32F407VG</Device>
@@ -74,8 +72,6 @@
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
-            <nStopB1X>0</nStopB1X>
-            <nStopB2X>0</nStopB2X>
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>0</RunUserProg1>
@@ -84,8 +80,6 @@
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
-            <nStopA1X>0</nStopA1X>
-            <nStopA2X>0</nStopA2X>
           </AfterMake>
           <SelectedForBatchBuild>0</SelectedForBatchBuild>
           <SVCSIdString></SVCSIdString>
@@ -147,9 +141,10 @@
             <RestoreToolbox>1</RestoreToolbox>
             <RestoreTracepoints>0</RestoreTracepoints>
             <RestoreSysVw>1</RestoreSysVw>
+            <UsePdscDebugDescription>1</UsePdscDebugDescription>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
-          <TargetSelection>5</TargetSelection>
+          <TargetSelection>11</TargetSelection>
           <SimDlls>
             <CpuDll></CpuDll>
             <CpuDllArguments></CpuDllArguments>
@@ -173,7 +168,7 @@
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
             <Capability>1</Capability>
-            <DriverSelection>4107</DriverSelection>
+            <DriverSelection>4103</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>STLink\ST-LINKIII-KEIL_SWO.dll</Flash2>
@@ -229,7 +224,6 @@
             <useUlib>1</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
-            <nSecure>0</nSecure>
             <RoSelD>3</RoSelD>
             <RwSelD>3</RwSelD>
             <CodeSel>0</CodeSel>
@@ -350,7 +344,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>1</Optim>
+            <Optim>4</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -364,18 +358,11 @@
             <uSurpInc>0</uSurpInc>
             <uC99>0</uC99>
             <useXO>0</useXO>
-            <v6Lang>1</v6Lang>
-            <v6LangP>1</v6LangP>
-            <vShortEn>1</vShortEn>
-            <vShortWch>1</vShortWch>
-            <v6Lto>0</v6Lto>
-            <v6WtE>0</v6WtE>
-            <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls>--C99</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F407xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;             ../Drivers/STM32F4xx_HAL_Driver/Inc;             ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;             ../Drivers/CMSIS/Device/ST/STM32F4xx/Include;             ../Drivers/CMSIS/Include;             ..\Drivers\src;             ..\Drivers;             ..\Drivers\N3310Lib-master</IncludePath>
+              <IncludePath>../Inc;   ../Drivers/STM32F4xx_HAL_Driver/Inc;   ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;   ../Drivers/CMSIS/Device/ST/STM32F4xx/Include;   ../Drivers/CMSIS/Include;   ..\Drivers</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -388,7 +375,6 @@
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
             <useXO>0</useXO>
-            <uClangAs>0</uClangAs>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
@@ -460,6 +446,21 @@
               <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c</FilePath>
             </File>
             <File>
+              <FileName>stm32f4xx_hal_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_gpio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_tim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c</FilePath>
+            </File>
+            <File>
               <FileName>stm32f4xx_hal_flash.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c</FilePath>
@@ -468,6 +469,11 @@
               <FileName>stm32f4xx_hal_flash_ex.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_hal.c</FileName>
@@ -485,6 +491,11 @@
               <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c</FilePath>
             </File>
             <File>
+              <FileName>stm32f4xx_hal_tim_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c</FilePath>
+            </File>
+            <File>
               <FileName>stm32f4xx_hal_dma.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c</FilePath>
@@ -493,36 +504,6 @@
               <FileName>stm32f4xx_hal_pwr.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_tim.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_tim_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_spi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_ll_gpio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_gpio.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_gpio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -544,11 +525,26 @@
               <FileType>1</FileType>
               <FilePath>../Src/main.c</FilePath>
             </File>
+            <File>
+              <FileName>flash_memory.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\flash_memory.c</FilePath>
+            </File>
+            <File>
+              <FileName>LCD.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\LCD.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>nokio</GroupName>
           <Files>
+            <File>
+              <FileName>nokio.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Drivers\nokio.h</FilePath>
+            </File>
             <File>
               <FileName>tm_stm32f4_pcd8544.c</FileName>
               <FileType>1</FileType>

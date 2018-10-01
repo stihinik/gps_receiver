@@ -8,7 +8,7 @@ led\tm_stm32f4_pcd8544.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.
 led\tm_stm32f4_pcd8544.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
 led\tm_stm32f4_pcd8544.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h
 led\tm_stm32f4_pcd8544.o: ../Drivers/CMSIS/Include/core_cm4.h
-led\tm_stm32f4_pcd8544.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+led\tm_stm32f4_pcd8544.o: C:\Keil\ARM\ARMCC\bin\..\include\stdint.h
 led\tm_stm32f4_pcd8544.o: ../Drivers/CMSIS/Include/core_cmInstr.h
 led\tm_stm32f4_pcd8544.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
 led\tm_stm32f4_pcd8544.o: ../Drivers/CMSIS/Include/core_cmFunc.h
@@ -16,7 +16,7 @@ led\tm_stm32f4_pcd8544.o: ../Drivers/CMSIS/Include/core_cmSimd.h
 led\tm_stm32f4_pcd8544.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h
 led\tm_stm32f4_pcd8544.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 led\tm_stm32f4_pcd8544.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
-led\tm_stm32f4_pcd8544.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+led\tm_stm32f4_pcd8544.o: C:\Keil\ARM\ARMCC\bin\..\include\stdio.h
 led\tm_stm32f4_pcd8544.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h
 led\tm_stm32f4_pcd8544.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h
 led\tm_stm32f4_pcd8544.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h

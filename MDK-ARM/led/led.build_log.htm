@@ -8,32 +8,59 @@ Project File Date:  10/01/2018
 
 <h2>Output:</h2>
 Build target 'led'
-compiling main.c...
+linking...
+Program Size: Code=10044 RO-data=1412 RW-data=20 ZI-data=1716  
+"led\led.axf" - 0 Error(s), 0 Warning(s).
+</pre>
+</body>
+</html>
+ning:  #550-D: parameter "to" was set but never used
+  void StringInFloat(char to, char *from, uint8_t next_comma)
+..\Src\GPS.c: 2 warnings, 0 errors
+linking...
+Program Size: Code=10044 RO-data=1412 RW-data=20 ZI-data=1716  
+"led\led.axf" - 0 Error(s), 2 Warning(s).
+ errors
+compiling LCD.c...
 ../Inc/my_function.h(13): warning:  #1295-D: Deprecated declaration Initial_Inscription - give arg types
         void Initial_Inscription();
-../Inc/my_function.h(19): warning:  #1-D: last line of file ends without a newline
+../Inc/my_function.h(26): warning:  #1-D: last line of file ends without a newline
   #endif 
-../Src/main.c(134): error:  #167: argument of type "float *" is incompatible with parameter of type "char *"
-                        StringInFloat(&GPRMC.time,data_GPS,1);
-../Src/main.c(138): error:  #167: argument of type "float *" is incompatible with parameter of type "char *"
-                                StringInFloat(&GPRMC.dat,data_GPS,9);
-../Src/main.c(142): error:  #167: argument of type "float *" is incompatible with parameter of type "char *"
-                                StringInFloat(&GPRMC.lat,data_GPS,3);
-../Src/main.c(145): error:  #167: argument of type "float *" is incompatible with parameter of type "char *"
-                                StringInFloat(&GPRMC.log,data_GPS,5);
-../Src/main.c(148): error:  #167: argument of type "float *" is incompatible with parameter of type "char *"
-                                StringInFloat(&GPRMC.v, data_GPS,7);
-../Src/main.c(150): error:  #167: argument of type "float *" is incompatible with parameter of type "char *"
-                                StringInFloat(&GPRMC.dat,data_GPS,9);
-../Src/main.c(164): error:  #167: argument of type "float *" is incompatible with parameter of type "char *"
-                                StringInFloat(&GPGGA.time,data_GPS,comma+1);
-../Src/main.c(165): error:  #167: argument of type "float *" is incompatible with parameter of type "char *"
-                                StringInFloat(&GPGGA.lat,data_GPS,comma+2);
-../Src/main.c(167): error:  #167: argument of type "float *" is incompatible with parameter of type "char *"
-                                StringInFloat(&GPGGA.log,data_GPS,comma+4);
-../Src/main.c(169): error:  #167: argument of type "float *" is incompatible with parameter of type "char *"
-                                StringInFloat(&GPGGA.count,data_GPS,comma+7);
-../Src/main.c(171): error:  #167: argument of type "float *" is incompatible with parameter of type "char *"
+..\Src\LCD.c(93): warning:  #1-D: last line of file ends without a newline
+  }
+..\Src\LCD.c: 3 warnings, 0 errors
+compiling GPS.c...
+..\Src\GPS.c(5): error:  #169: expected a declaration
+  extern struct GP{};
+..\Src\GPS.c(5): warning:  #1000-D: a storage class may not be specified here
+  extern struct GP{};
+..\Src\GPS.c(53): error:  #137: expression must be a modifiable lvalue
+        &to=atof(string);
+..\Src\GPS.c: 1 warning, 2 errors
+"led\led.axf" - 2 Error(s), 7 Warning(s).
+Target not created
+         
+..\Src\GPS.c(80): error:  #70: incomplete type is not allowed
+        StringInFloat(GPRMC.dat,from,9);
+..\Src\GPS.c(87): error:  #20: identifier "data_GPS" is undefined
+        while(data_GPS[counter]!='$')
+..\Src\GPS.c: 1 warning, 9 errors
+"led\led.axf" - 9 Error(s), 3 Warning(s).
+Target not created
+ng, 0 errors
+compiling tm_stm32f4_pcd8544.c...
+..\Drivers\tm_stm32f4_pcd8544.c(424): warning: C4017W: b may be used before being set
+        unsigned char c_height, c_width, i, b, j;
+..\Drivers\tm_stm32f4_pcd8544.c: 1 warning, 0 errors
+linking...
+led\led.axf: Error: L6218E: Undefined symbol Output_Line (referred from main.o).
+led\led.axf: Error: L6218E: Undefined symbol StringInFloat (referred from main.o).
+led\led.axf: Error: L6218E: Undefined symbol WriteGPSinMassiv (referred from main.o).
+Not enough information to list image symbols.
+Finished: 1 information, 0 warning and 3 error messages.
+"led\led.axf" - 3 Error(s), 7 Warning(s).
+Target not created
+
                                 StringInFloat(&GPGGA.geom,data_GPS,comma+8);
 ../Src/main.c(172): error:  #167: argument of type "float *" is incompatible with parameter of type "char *"
                                 StringInFloat(&GPGGA.vis1,data_GPS,comma+9);
@@ -44,86 +71,4 @@ compiling main.c...
 ../Src/main.c: 3 warnings, 13 errors
 "led\led.axf" - 13 Error(s), 3 Warning(s).
 Target not created
-</pre>
-</body>
-</html>
-incompatible with parameter of type "char *"
-                                StringInFloat(&GPGGA.vis1,data_GPS,comma+9);
-../Src/main.c(173): error:  #167: argument of type "char" is incompatible with parameter of type "char *"
-                                Output_Line(GPGGA.rvis1,data_GPS,comma+10);
-../Src/main.c(175): error:  #167: argument of type "float *" is incompatible with parameter of type "char *"
-                                StringInFloat(&GPGGA.vis2,data_GPS,comma+11);
-../Src/main.c(97): warning:  #177-D: variable "data" was declared but never referenced
-  uint8_t data;
-../Src/main.c: 3 warnings, 17 errors
-compiling LCD.c...
-..\Src\LCD.c(16): warning:  #1-D: last line of file ends without a newline
-  }
-..\Src\LCD.c: 1 warning, 0 errors
-"led\led.axf" - 17 Error(s), 4 Warning(s).
-Target not created
-d implicitly
-        PCD8544_Puts("STM32F429", PCD8544_Pixel_Set, PCD8544_FontSize_5x7);
-..\Src\LCD.c(6): error:  #20: identifier "PCD8544_Pixel_Set" is undefined
-        PCD8544_Puts("STM32F429", PCD8544_Pixel_Set, PCD8544_FontSize_5x7);
-..\Src\LCD.c(6): error:  #20: identifier "PCD8544_FontSize_5x7" is undefined
-        PCD8544_Puts("STM32F429", PCD8544_Pixel_Set, PCD8544_FontSize_5x7);
-..\Src\LCD.c(12): warning:  #223-D: function "PCD8544_Refresh" declared implicitly
-        PCD8544_Refresh();
-..\Src\LCD.c(13): warning:  #1-D: last line of file ends without a newline
-  }
-..\Src\LCD.c: 4 warnings, 2 errors
-"led\led.axf" - 19 Error(s), 7 Warning(s).
-Target not created
-c: 0 warnings, 2 errors
-compiling stm32f4xx_hal_tim_ex.c...
-../Inc/main.h(47): error:  #20: identifier "uint32_t" is undefined
-  uint32_t flash_read(uint32_t address) ;
-../Inc/main.h(47): error:  #20: identifier "uint32_t" is undefined
-  uint32_t flash_read(uint32_t address) ;
-../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c: 0 warnings, 2 errors
-compiling stm32f4xx_hal_dma.c...
-../Inc/main.h(47): error:  #20: identifier "uint32_t" is undefined
-  uint32_t flash_read(uint32_t address) ;
-../Inc/main.h(47): error:  #20: identifier "uint32_t" is undefined
-  uint32_t flash_read(uint32_t address) ;
-../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c: 0 warnings, 2 errors
-compiling stm32f4xx_hal_pwr.c...
-../Inc/main.h(47): error:  #20: identifier "uint32_t" is undefined
-  uint32_t flash_read(uint32_t address) ;
-../Inc/main.h(47): error:  #20: identifier "uint32_t" is undefined
-  uint32_t flash_read(uint32_t address) ;
-../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c: 0 warnings, 2 errors
-compiling stm32f4xx_hal_msp.c...
-../Inc/main.h(47): error:  #20: identifier "uint32_t" is undefined
-  uint32_t flash_read(uint32_t address) ;
-../Inc/main.h(47): error:  #20: identifier "uint32_t" is undefined
-  uint32_t flash_read(uint32_t address) ;
-../Src/stm32f4xx_hal_msp.c: 0 warnings, 2 errors
-compiling stm32f4xx_it.c...
-../Inc/main.h(47): error:  #20: identifier "uint32_t" is undefined
-  uint32_t flash_read(uint32_t address) ;
-../Inc/main.h(47): error:  #20: identifier "uint32_t" is undefined
-  uint32_t flash_read(uint32_t address) ;
-../Src/stm32f4xx_it.c: 0 warnings, 2 errors
-compiling main.c...
-../Src/main.c(307): warning:  #550-D: variable "GPGGA" was set but never used
-                                                struct GP GPGGA;
-../Src/main.c(233): warning:  #177-D: variable "data" was declared but never referenced
-  uint8_t data;
-../Src/main.c: 2 warnings, 0 errors
-compiling flash_memory.c...
-..\Src\flash_memory.c(44): warning:  #1-D: last line of file ends without a newline
-  }
-..\Src\flash_memory.c: 1 warning, 0 errors
-compiling tm_stm32f4_pcd8544.c...
-..\Drivers\tm_stm32f4_pcd8544.c(424): warning: C4017W: b may be used before being set
-        unsigned char c_height, c_width, i, b, j;
-..\Drivers\tm_stm32f4_pcd8544.c: 1 warning, 0 errors
-"led\led.axf" - 36 Error(s), 4 Warning(s).
-Target not created
-ned
-  uint32_t flash_read(uint32_t address) ;
-..\Drivers\tm_stm32f4_pcd8544.c: 0 warnings, 2 errors
-"led\led.axf" - 40 Error(s), 2 Warning(s).
-Target not created
+d

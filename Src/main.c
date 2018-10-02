@@ -40,7 +40,7 @@
 #include "stm32f4xx_hal.h"
 #include "tm_stm32f4_pcd8544.h"
 #include "my_function.h"
-#include "stdlib.h"
+
 
 /* USER CODE BEGIN Includes */
 
@@ -68,24 +68,53 @@ static void MX_SPI2_Init(void);
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
+
 struct GP {
-	char tip[10];
+	char tip[10];//GPS format
 	float time;
-	char sost;
+	char sost;//reception status
 	float dat;
-	float lat;
-  char naplat;
-	float log;
-  char naplog;
-	float v;
-	float count;
-	float geom;
-	float vis1;
-	char rvis1;
-	float vis2;
-	char rvis2;
+	float lat;//latitude coordinates
+  char naplat;//latitude direction
+	float log;//longitude coordinates
+  char naplog;//longitude direction
+	float v;//travel speed
+	float count;//number of satellites from which data is received
+	float geom;//geomagnetic index
+	float vis1;//height above ground
+	char rvis1;//dimension of height
+	float vis2;//height above sea level
+	char rvis2;//dimension of height
 };
 
+//Record the remaining RMC data with a successful signal reception
+void WriteRMCdata( char from[300])
+{
+  struct GP GPRMC;
+	StringInFloat(GPRMC.lat,from,3);
+	Output_Line(&GPRMC.naplat,from,4);
+	StringInFloat(GPRMC.log,from,5);
+	StringInFloat(GPRMC.naplog,from,6);
+	StringInFloat(GPRMC.v, from,7);								
+	StringInFloat(GPRMC.dat,from,9);
+}
+//Record GGA data in the structure
+void WriteGGAdata( char from[300],uint8_t comma)
+{
+	struct GP GPGGA;
+	Output_Line(GPGGA.tip,from,comma);
+	StringInFloat(GPGGA.time,from,comma+1);
+	StringInFloat(GPGGA.lat,from,comma+2);
+	Output_Line(&GPGGA.naplat,from,comma+3);
+	StringInFloat(GPGGA.log,from,comma+4);
+	Output_Line(&GPGGA.naplog,from,comma+5);
+	StringInFloat(GPGGA.count,from,comma+7);
+	StringInFloat(GPGGA.geom,from,comma+8);
+	StringInFloat(GPGGA.vis1,from,comma+9);
+	Output_Line(&GPGGA.rvis1,from,comma+10);
+	StringInFloat(GPGGA.vis2,from,comma+11);
+	StringInFloat(GPGGA.rvis2,from,comma+12);
+}
 /* USER CODE END 0 */
 
 int main(void)
@@ -94,8 +123,7 @@ int main(void)
   /* USER CODE BEGIN 1 */
 char data_GPS[300];
 char time[20],late[20], log[20],v[20], dat[20], visota[20],visota2[20],count[20],dop[20],dop2[20];
-uint8_t data;
-uint16_t counter,comma=0;
+uint16_t comma=0;
 uint8_t counter_Button=0;	
   /* USER CODE END 1 */
 
@@ -121,61 +149,36 @@ uint8_t counter_Button=0;
   MX_SPI2_Init();
 
   /* USER CODE BEGIN 2 */
-	void Initial_Inscription();
+	Initial_Inscription();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+		//Record GPS data in the array
     WriteGPSinMassiv(data_GPS);		
+		//Write the original RMC data to the structure
 		struct GP GPRMC;
-			Output_Line(GPRMC.tip,data_GPS,0);
-			StringInFloat(&GPRMC.time,data_GPS,1);
-      Output_Line(&GPRMC.sost,data_GPS,2);
-			if (GPRMC.sost=='V')
-			{ 
-				StringInFloat(&GPRMC.dat,data_GPS,9);
-			}
-			else
-			{
-				StringInFloat(&GPRMC.lat,data_GPS,3);
-				Output_Line(late,data_GPS,3);
-				Output_Line(&GPRMC.naplat,data_GPS,4);
-				StringInFloat(&GPRMC.log,data_GPS,5);
-				Output_Line(log,data_GPS,5);
-				StringInFloat(&GPRMC.naplog,data_GPS,6);
-				StringInFloat(&GPRMC.v, data_GPS,7);
-				Output_Line(v,data_GPS,7);					
-				StringInFloat(&GPRMC.dat,data_GPS,9);
-				Output_Line(dat,data_GPS,9);
-				counter=1;
-				comma=0;
-				while(data_GPS[counter]!='$')
-				{
-					if(data_GPS[counter]==',')
-					{
-						comma++;
-					}
-					counter++;
-				}
-				struct GP GPGGA;
-				Output_Line(GPGGA.tip,data_GPS,comma);
-				StringInFloat(&GPGGA.time,data_GPS,comma+1);
-				StringInFloat(&GPGGA.lat,data_GPS,comma+2);
-				Output_Line(&GPGGA.naplat,data_GPS,comma+3);
-				StringInFloat(&GPGGA.log,data_GPS,comma+4);
-				Output_Line(&GPGGA.naplog,data_GPS,comma+5);
-				StringInFloat(&GPGGA.count,data_GPS,comma+7);
-				Output_Line(count,data_GPS,comma+7);
-				StringInFloat(&GPGGA.geom,data_GPS,comma+8);
-				StringInFloat(&GPGGA.vis1,data_GPS,comma+9);
-				Output_Line(&GPGGA.rvis1,data_GPS,comma+10);
-				Output_Line(visota,data_GPS,comma+9);
-				StringInFloat(&GPGGA.vis2,data_GPS,comma+11);
-				StringInFloat(&GPGGA.rvis2,data_GPS,comma+12);
-				Output_Line(visota2,data_GPS,comma+11);
-			}
+		Output_Line(GPRMC.tip,data_GPS,0);
+		StringInFloat(GPRMC.time,data_GPS,1);
+		Output_Line(&GPRMC.sost,data_GPS,2);
+		if (GPRMC.sost=='V')
+		{ 
+			StringInFloat(GPRMC.dat,data_GPS,9);
+		}
+		else
+		{ 
+			//Record the remaining RMC data with a successful signal reception
+			WriteRMCdata(data_GPS);
+			//Search for a comma after which the GGA data begin
+			struct GP GPGGA;
+			comma = SearchCommaGGA(data_GPS);
+			//Record GGA data in the structure
+			WriteGGAdata(data_GPS, comma);
+			//Writing necessary data to arrays for display
+			WriteMasForLCD(data_GPS, late,log,v,dat,count,visota,visota2,comma);
+		}
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
@@ -185,66 +188,27 @@ uint8_t counter_Button=0;
 		  if (counter_Button<5){counter_Button++;}
 			else  
 			{
-				HAL_GPIO_WritePin(GPIOD	,GPIO_PIN_15, GPIO_PIN_SET);
-				WriteDeviceAddress(late,log);
-				counter_Button=1;
-				HAL_GPIO_WritePin(GPIOD	,GPIO_PIN_15, GPIO_PIN_RESET);
+				//writing data to flash memory if the button is long pressed
+				WriteNewCoordin (late, log);
+	      counter_Button=1;
 			}
 	  }
-
     if ((counter_Button==1)&(READ_BUTTON ==0))
 		{
-		 PCD8544_Clear();
-		 //Go to x=14, y=3 position
-		 PCD8544_GotoXY(10, 0);
-		 PCD8544_Puts(late, PCD8544_Pixel_Set, PCD8544_FontSize_5x7);
-		 PCD8544_GotoXY(10, 10);
-		 PCD8544_Puts(log, PCD8544_Pixel_Set, PCD8544_FontSize_5x7);
-		 PCD8544_GotoXY(0, 20);
-		 PCD8544_Puts("h_s=", PCD8544_Pixel_Set, PCD8544_FontSize_5x7);
-		 PCD8544_GotoXY(25, 20);
-		 PCD8544_Puts(visota, PCD8544_Pixel_Set, PCD8544_FontSize_5x7);
-		 PCD8544_GotoXY(55, 20);
-		 PCD8544_Puts("sp=", PCD8544_Pixel_Set, PCD8544_FontSize_5x7);
-		 PCD8544_GotoXY(72, 20);
-		 PCD8544_Puts(count, PCD8544_Pixel_Set, PCD8544_FontSize_5x7);
-		 ReadDeviceAddress(dop,dop2);
-		 PCD8544_GotoXY(10, 30);
-		 PCD8544_Puts(dop, PCD8544_Pixel_Set, PCD8544_FontSize_5x7);
-		 PCD8544_GotoXY(10, 40);
-	   PCD8544_Puts(dop2, PCD8544_Pixel_Set, PCD8544_FontSize_5x7);
-		 //Display data on LCD
-		 PCD8544_Refresh();
+			//display if the button is pressed once
+		  First_Button(late, log,visota,count, dop, dop2);
 		}
 		else if ((counter_Button==2)&(READ_BUTTON ==0))
-			{
-				PCD8544_Clear();
-			 //Go to x=14, y=3 position
-			 PCD8544_GotoXY(10, 0);
-			 PCD8544_Puts("time=", PCD8544_Pixel_Set, PCD8544_FontSize_5x7);
-			 PCD8544_GotoXY(30, 10);
-			 PCD8544_Puts(time, PCD8544_Pixel_Set, PCD8544_FontSize_5x7);
-			 PCD8544_GotoXY(10, 20);
-			 PCD8544_Puts("speed=", PCD8544_Pixel_Set, PCD8544_FontSize_5x7);
-			 PCD8544_GotoXY(30, 30);
-			 PCD8544_Puts(v, PCD8544_Pixel_Set, PCD8544_FontSize_5x7);
-			 PCD8544_GotoXY(10, 40);
-			 PCD8544_Puts("h_ellip=", PCD8544_Pixel_Set, PCD8544_FontSize_5x7);
-			 PCD8544_GotoXY(55, 40);
-			 PCD8544_Puts(visota2, PCD8544_Pixel_Set, PCD8544_FontSize_5x7);
-			 //Display data on LCD
-			 PCD8544_Refresh();
-			}
-			if ((counter_Button==3)&(READ_BUTTON==0))
-			{	
-       PCD8544_Clear();			 
-			 PCD8544_GotoXY(10, 10);				
-			 PCD8544_Puts("dat=", PCD8544_Pixel_Set, PCD8544_FontSize_5x7);
-			 PCD8544_GotoXY(30, 20);				
-			 PCD8544_Puts(dat, PCD8544_Pixel_Set, PCD8544_FontSize_5x7);					
-			 PCD8544_Refresh();
+		{
+			//display if the button is pressed twice
+			Second_Button (time, v, visota);
+		}
+		else if ((counter_Button==3)&(READ_BUTTON==0))
+		{	
+			//display if the button is pressed three times
+			 Theird_Button(dat);
 			 counter_Button=0;
-			}
+		}
 	}
   /* USER CODE END 3 */
 

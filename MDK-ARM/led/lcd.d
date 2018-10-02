@@ -30,3 +30,4 @@ led\lcd.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
 led\lcd.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h
 led\lcd.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 led\lcd.o: ..\Drivers\tm_stm32f4_pcd8544.h
+led\lcd.o: ../Inc/my_function.h

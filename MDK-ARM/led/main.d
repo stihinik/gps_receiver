@@ -31,4 +31,3 @@ led\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h
 led\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 led\main.o: ..\Drivers\tm_stm32f4_pcd8544.h
 led\main.o: ../Inc/my_function.h
-led\main.o: C:\Keil\ARM\ARMCC\bin\..\include\stdlib.h

@@ -1,5 +1,9 @@
 #include "stm32f4xx_hal.h"
+#include "stdlib.h"
 
+extern UART_HandleTypeDef huart3;
+
+//Record GPS data in the array
 void WriteGPSinMassiv(char buf[300])
 {
 	uint8_t data = 0;
@@ -23,7 +27,7 @@ void WriteGPSinMassiv(char buf[300])
 			}
 		}
 }
-
+//translation of necessary data after a comma in line
 void Output_Line(char*to, char*from, uint8_t next_comma)
 {
 	uint16_t i,s;
@@ -36,14 +40,33 @@ void Output_Line(char*to, char*from, uint8_t next_comma)
 	s=0;
 	while (from[i]!=',')
 	{
-	  to[s]=t[i];
+	  to[s]=from[i];
 		i++;
 		s++;
 	}
 }
-void StringInFloat(char to, char*from, uint8_t next_comma)
+//transfer of the necessary data after to float
+void StringInFloat(char to, char *from, uint8_t next_comma)
 {
 	char string[20];
+	char str;
 	Output_Line(string,from,next_comma);
-	to=atof(string);
+	strcpy(&str,string);
+	to=atof(&str);
 }
+//Search for a comma after which the GGA data begin
+uint8_t SearchCommaGGA(char from[300])
+{
+	uint16_t counter=1;
+	uint8_t comma=0;
+	while(from[counter]!='$')
+	{
+		if(from[counter]==',')
+		{
+			comma++;
+		}
+		counter++;
+	}
+	return comma;
+}
+

@@ -21,6 +21,8 @@
 "led\stm32f4xx_it.o"
 "led\main.o"
 "led\flash_memory.o"
+"led\lcd.o"
+"led\gps.o"
 "led\tm_stm32f4_pcd8544.o"
 --library_type=microlib --strict --scatter "led\led.sct"
 

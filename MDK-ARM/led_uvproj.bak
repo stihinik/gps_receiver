@@ -530,6 +530,11 @@
               <FileType>1</FileType>
               <FilePath>..\Src\flash_memory.c</FilePath>
             </File>
+            <File>
+              <FileName>LCD.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\LCD.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
